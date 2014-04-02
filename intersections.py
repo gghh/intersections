@@ -1,12 +1,5 @@
-nice_people = ['charline', 'martin', 'benedikt', 'camilla']
-rich_people = ['sebastian', 'camilla']
-smart_people = ['larry', 'camilla', 'charline', 'gustavo', 'audrey']
-tall_people = ['matt', 'sebastian']
-
 def flatten(listlist):
     return [elem for list_ in listlist for elem in list_]
-
-flatten([['a', 'b'], ['c', 'd', 'e']])
 
 def perm(sequence):
     if len(sequence) == 0:
@@ -18,8 +11,6 @@ def perm(sequence):
                        perm(sequence[:cnt] + sequence[(cnt+1):]))
         return out
 
-perm(['a', 'b', 'c'])
-
 def choose_n(n, srcList):
     if n == 0:
         return [[]]
@@ -29,8 +20,6 @@ def choose_n(n, srcList):
             out += map(lambda x: [elem] + x,
                        choose_n(n-1, srcList[(cnt+1):]))
         return out
-
-choose_n(2, ['a', 'b', 'c'])
 
 def allChoices(srcList):
     out = []
@@ -43,8 +32,6 @@ def allChoices(srcList):
             yield map(complSrcList, choose_n(tot - (i + 1), srcList))
         else:
             yield choose_n(i, srcList)
-
-list(allChoices(['a', 'b', 'c']))
 
 def intersLookup(lists):
     toInters = flatten(allChoices(lists.keys()))
@@ -60,32 +47,9 @@ def intersLookup(lists):
             lookup['&'.join(variant)] = cardinality
     return lookup
 
-intersLookup({'a': ['apple', 'banana'],
-              'b': ['orange', 'apple', 'watermelon'],
-              'c': ['peach', 'plum', 'pear', 'apple', 'orange']})
-
-
-    
-g = allChoices(['a', 'b', 'c'])
-g.next()
-g.next()
-g.next()
-g.next()
-
 def subints(elem, compl):
     for thing in allChoices(compl):
         yield map(lambda x: elem + x, thing)
-
-g = subints(['a'], ['b', 'c', 'd'])
-g.next() # add
-g.next() # subtract
-g.next() # add
-g.next() # it's over
-
-si =  subints(['a', 'c'], ['b', 'd'])
-si.next()
-si.next()
-si.next()
 
 def flip():
     curr = 1
@@ -110,28 +74,3 @@ def inclusionexclusion(elem, compl, allInters):
                                     nodes))),
                         subints(elem, compl)))))
     return currentInters - subintValue
-
-allInters = intersLookup({'a': ['apple', 'banana'],
-                          'b': ['orange', 'apple', 'watermelon'],
-                          'c': ['peach', 'plum', 'pear', 'apple', 'orange']})
-
-inclusionexclusion(['a', 'b'], ['c'], allInters)
-inclusionexclusion(['a', 'b', 'c'], [], allInters)
-inclusionexclusion(['a'], ['b', 'c'], allInters)
-
-
-
-
-for elem in subints(['a'], ['b', 'c']):
-    print elem
-    print '&'.join(elem)
-
-
-
-
-
-
-choose_n(1, ['a', 'b', 'c', 'd'])
-choose_n(2, ['a', 'b', 'c', 'd'])
-choose_n(3, ['a', 'b', 'c', 'd'])
-choose_n(4, ['a', 'b', 'c', 'd'])
