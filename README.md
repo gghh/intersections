@@ -1,0 +1,4 @@
+intersections
+=============
+
+Computes intersection explosions.
