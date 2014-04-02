@@ -21,11 +21,12 @@ def choose_n(n, srcList):
                        choose_n(n-1, srcList[(cnt+1):]))
         return out
 
+def complem(universe, ensemble):
+    return list(set(universe) - set(ensemble))
+
 def allChoices(srcList):
     out = []
     tot = len(srcList)+1
-    complem = lambda universe, ensemble: \
-        list(set(universe) - set(ensemble))
     complSrcList = lambda ensemble: complem(srcList, ensemble)
     for i in range(1, tot):
         if i > tot / 2: # integer division
@@ -74,3 +75,13 @@ def inclusionexclusion(elem, compl, allInters):
                                     nodes))),
                         subints(elem, compl)))))
     return currentInters - subintValue
+
+def explode(allNames, allInters):
+    out = {}
+    for elem in flatten(allChoices(allNames)):
+        out['&'.join(elem)] = \
+                    inclusionexclusion(elem,
+                                       complem(allNames, elem),
+                                       allInters)
+    return out
+    

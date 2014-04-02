@@ -113,6 +113,18 @@ class testInclusionExclusion(unittest.TestCase):
                                            ['b', 'c'],
                                            self.allInters) == 1)
 
+class testExplode(unittest.TestCase):
+    def test_explode_1(self):
+        sets = {'a': ['apple', 'banana'],
+                'b': ['orange', 'apple', 'watermelon'],
+                'c': ['peach', 'plum', 'pear', 'apple', 'orange']}
+        
+        allInters = intersLookup(sets)
+        e = explode(sets.keys(), allInters)
+        self.assertTrue(e ==
+                        {'a': 1, 'a&c&b': 1, 'c': 3, 'b': 1,
+                         'c&b': 1, 'a&b': 0, 'a&c': 0})
+
 
 if __name__ == '__main__':
     unittest.main()
