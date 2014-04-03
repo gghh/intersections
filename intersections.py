@@ -85,3 +85,12 @@ def explode(allNames, allInters):
                                        allInters)
     return out
     
+
+if __name__ == '__main__':
+    sets = {'a': ['apple', 'banana'],
+            'b': ['orange', 'apple', 'watermelon'],
+            'c': ['peach', 'plum', 'pear', 'apple', 'orange']}
+    allInters = intersLookup(sets)
+    e = explode(sets.keys(), allInters)
+    print 'Sets:', sets
+    print 'Exploded:', e
