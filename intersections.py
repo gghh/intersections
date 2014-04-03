@@ -40,7 +40,6 @@ def intersLookup(lists):
         return reduce(lambda s, t: set(s).intersection(set(t)),
                       [lists[name] for name in names[1:]],
                       lists[names[0]])
-    count = lambda (names, inters): (names, len(inters))
     lookup = {}
     for sequence in toInters:
         cardinality = len(inters_n(sequence))
