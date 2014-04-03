@@ -114,7 +114,7 @@ class testInclusionExclusion(unittest.TestCase):
                                            self.allInters) == 1)
 
 class testExplode(unittest.TestCase):
-    def test_explode_1(self):
+    def test_explode_3sets(self):
         sets = {'a': ['apple', 'banana'],
                 'b': ['orange', 'apple', 'watermelon'],
                 'c': ['peach', 'plum', 'pear', 'apple', 'orange']}
@@ -125,6 +125,78 @@ class testExplode(unittest.TestCase):
                         {'a': 1, 'a&c&b': 1, 'c': 3, 'b': 1,
                          'c&b': 1, 'a&b': 0, 'a&c': 0})
 
+    def test_explode_4sets(self):
+        liA = []
+        liB = []
+        liC = []
+        liD = []
+        
+        liA += [1]
+        liB += [1]
+        liC += [1]
+        liD += [1]
+        
+        liA += range(2,4)
+        liB += range(2,4)
+        liC += range(2,4)
+        
+        liA += range(4,7)
+        liB += range(4,7)
+        liD += range(4,7)
+        
+        liA += range(7,11)
+        liC += range(7,11)
+        liD += range(7,11)
+        
+        liB += range(11,16)
+        liC += range(11,16)
+        liD += range(11,16)
+        
+        liA += range(16,22)
+        liB += range(16,22)
+        
+        liA += range(22, 29)
+        liC += range(22, 29)
+        
+        liA += range(29, 37)
+        liD += range(29, 37)
+        
+        liB += range(37, 46)
+        liC += range(37, 46)
+        
+        liB += range(46, 56)
+        liD += range(46, 56)
+        
+        liC += range(56, 67)
+        liD += range(56, 67)
+        
+        liA += range(67, 79)
+        
+        liB += range(79, 92)
+        
+        liC += range(92, 106)
+        
+        liD += range(106, 121)
+        
+        allInters = intersLookup({'a': liA, 'b': liB,
+                                  'c': liC, 'd': liD})
+        e = explode(['a', 'b', 'c', 'd'], allInters)
+        self.assertTrue(sorted(e.iteritems(), key=lambda x: x[1]) ==
+                        [('a&c&b&d', 1),
+                         ('a&c&b', 2),
+                         ('a&b&d', 3),
+                         ('a&c&d', 4),
+                         ('c&b&d', 5),
+                         ('a&b', 6),
+                         ('a&c', 7),
+                         ('a&d', 8),
+                         ('b&c', 9),
+                         ('b&d', 10),
+                         ('c&d', 11),
+                         ('a', 12),
+                         ('b', 13),
+                         ('c', 14),
+                         ('d', 15)])
 
 if __name__ == '__main__':
     unittest.main()
