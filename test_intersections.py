@@ -182,21 +182,21 @@ class testExplode(unittest.TestCase):
                                   'c': liC, 'd': liD})
         e = explode(['a', 'b', 'c', 'd'], allInters)
         self.assertTrue(sorted(e.iteritems(), key=lambda x: x[1]) ==
-                        [('a&c&b&d', 1),
-                         ('a&c&b', 2),
-                         ('a&b&d', 3),
-                         ('a&c&d', 4),
-                         ('c&b&d', 5),
-                         ('a&b', 6),
-                         ('a&c', 7),
-                         ('a&d', 8),
-                         ('b&c', 9),
-                         ('b&d', 10),
-                         ('c&d', 11),
-                         ('a', 12),
-                         ('b', 13),
-                         ('c', 14),
-                         ('d', 15)])
+                        [('a&c&b&d',   1),
+                         ('a&c&b',     2),
+                         ('a&b&d',     3),
+                         ('a&c&d',     4),
+                         ('c&b&d',     5),
+                         ('a&b',       6),
+                         ('a&c',       7),
+                         ('a&d',       8),
+                         ('b&c',       9),
+                         ('b&d',      10),
+                         ('c&d',      11),
+                         ('a',        12),
+                         ('b',        13),
+                         ('c',        14),
+                         ('d',        15)])
 
 if __name__ == '__main__':
     unittest.main()
