@@ -30,9 +30,9 @@ class testChoice(unittest.TestCase):
         self.assertTrue(['b', 'c'] in c2)
 
 
-class testAllChoices(unittest.TestCase):
-    def test_allChoices(self):
-        ac = list(allChoices(['a', 'b', 'c']))
+class testSubsets(unittest.TestCase):
+    def test_allsubsets(self):
+        ac = list(allsubsets(['a', 'b', 'c']))
         
         self.assertTrue(len(ac) == 3)
 

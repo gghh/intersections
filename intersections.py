@@ -24,7 +24,7 @@ def choose_n(n, srcList):
 def complem(universe, ensemble):
     return list(set(universe) - set(ensemble))
 
-def allChoices(srcList):
+def allsubsets(srcList):
     out = []
     tot = len(srcList)+1
     complSrcList = lambda ensemble: complem(srcList, ensemble)
@@ -35,7 +35,7 @@ def allChoices(srcList):
             yield choose_n(i, srcList)
 
 def intersLookup(lists):
-    toInters = flatten(allChoices(lists.keys()))
+    toInters = flatten(allsubsets(lists.keys()))
     def inters_n(names):
         return reduce(lambda s, t: set(s).intersection(set(t)),
                       [lists[name] for name in names[1:]],
@@ -48,7 +48,7 @@ def intersLookup(lists):
     return lookup
 
 def subints(elem, compl):
-    for thing in allChoices(compl):
+    for thing in allsubsets(compl):
         yield map(lambda x: elem + x, thing)
 
 def flip():
@@ -77,7 +77,7 @@ def inclusionexclusion(elem, compl, allInters):
 
 def explode(allNames, allInters):
     out = {}
-    for elem in flatten(allChoices(allNames)):
+    for elem in flatten(allsubsets(allNames)):
         out['&'.join(elem)] = \
                     inclusionexclusion(elem,
                                        complem(allNames, elem),
