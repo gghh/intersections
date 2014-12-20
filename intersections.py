@@ -1,15 +1,23 @@
 def flatten(listlist):
     return [elem for list_ in listlist for elem in list_]
 
-def perm(sequence):
-    if len(sequence) == 0:
-        return [[]]
-    else:
-        out = []
-        for cnt, elem in enumerate(sequence):
-            out += map(lambda x: [elem] + x,
-                       perm(sequence[:cnt] + sequence[(cnt+1):]))
-        return out
+def _perm():
+    memo = {}
+    def inner(sequence):
+        if len(sequence) == 0:
+            return [[]]
+        elif frozenset(sequence) in memo:
+            return memo[frozenset(sequence)]
+        else:
+            out = []
+            for cnt, elem in enumerate(sequence):
+                out += map(lambda x: [elem] + x,
+                           perm(sequence[:cnt] + sequence[(cnt+1):]))
+            memo[frozenset(sequence)] = out
+            return out
+    return inner
+
+perm = _perm()
 
 def choose_n(n, srcList):
     if n == 0:
