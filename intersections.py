@@ -52,7 +52,7 @@ def intersLookup(lists):
     for sequence in toInters:
         cardinality = len(inters_n(sequence))
         for variant in perm(sequence):
-            lookup['&'.join(variant)] = cardinality
+            lookup[frozenset(variant)] = cardinality
     return lookup
 
 def subints(elem, compl):
@@ -72,13 +72,13 @@ def o(f, g):
     return helper
 
 def inclusionexclusion(elem, compl, allInters):
-    currentInters = allInters['&'.join(elem)]
+    currentInters = allInters[frozenset(elem)]
     sign = flip()
     subintValue = \
         sum(map(lambda (sign, value): sign * value,
                 zip(sign,
                     map(o(sum, (lambda nodes: 
-                                map(lambda node: allInters['&'.join(node)],
+                                map(lambda node: allInters[frozenset(node)],
                                     nodes))),
                         subints(elem, compl)))))
     return currentInters - subintValue
@@ -86,7 +86,7 @@ def inclusionexclusion(elem, compl, allInters):
 def explode(allNames, allInters):
     out = {}
     for elem in flatten(allsubsets(allNames)):
-        out['&'.join(elem)] = \
+        out[frozenset(elem)] = \
                     inclusionexclusion(elem,
                                        complem(allNames, elem),
                                        allInters)

@@ -1,6 +1,9 @@
 import unittest
 from intersections import *
 
+def fs(*elems):
+    return frozenset(elems)
+
 class testFlatten(unittest.TestCase):
     def test_flatten(self):
         self.assertTrue(flatten([['a', 'b'], ['c', 'd', 'e']]) ==
@@ -54,12 +57,12 @@ class testIntersLookup(unittest.TestCase):
                                'b': ['orange', 'apple', 'watermelon'],
                                'c': ['peach', 'plum', 'pear', 'apple', 'orange']})
         self.assertTrue(lookup == 
-                        {'a': 2, 'c': 5, 'b': 3, 
-                         'a&b&c': 1, 'b&c&a': 1, 'c&b&a': 1,
-                         'a&c&b': 1, 'b&a&c': 1, 'c&a&b': 1,
-                         'b&a': 1, 'a&b': 1,
-                         'b&c': 2, 'c&b': 2,
-                         'c&a': 1, 'a&c': 1})
+                        {fs('a'): 2, fs('c'): 5, fs('b'): 3, 
+                         fs('a','b','c'): 1, fs('b','c','a'): 1, fs('c','b','a'): 1,
+                         fs('a','c','b'): 1, fs('b','a','c'): 1, fs('c','a','b'): 1,
+                         fs('b','a'): 1, fs('a','b'): 1,
+                         fs('b','c'): 2, fs('c','b'): 2,
+                         fs('c','a'): 1, fs('a','c'): 1})
 
 class testSubints(unittest.TestCase):
     def test_subints_1(self):
@@ -122,8 +125,8 @@ class testExplode(unittest.TestCase):
         allInters = intersLookup(sets)
         e = explode(sets.keys(), allInters)
         self.assertTrue(e ==
-                        {'a': 1, 'a&c&b': 1, 'c': 3, 'b': 1,
-                         'c&b': 1, 'a&b': 0, 'a&c': 0})
+                        {fs('a'): 1, fs('a','c','b'): 1, fs('c'): 3, fs('b'): 1,
+                         fs('c','b'): 1, fs('a','b'): 0, fs('a','c'): 0})
 
     def test_explode_4sets(self):
         liA = []
@@ -182,21 +185,21 @@ class testExplode(unittest.TestCase):
                                   'c': liC, 'd': liD})
         e = explode(['a', 'b', 'c', 'd'], allInters)
         self.assertTrue(sorted(e.iteritems(), key=lambda x: x[1]) ==
-                        [('a&c&b&d',   1),
-                         ('a&c&b',     2),
-                         ('a&b&d',     3),
-                         ('a&c&d',     4),
-                         ('c&b&d',     5),
-                         ('a&b',       6),
-                         ('a&c',       7),
-                         ('a&d',       8),
-                         ('b&c',       9),
-                         ('b&d',      10),
-                         ('c&d',      11),
-                         ('a',        12),
-                         ('b',        13),
-                         ('c',        14),
-                         ('d',        15)])
+                        [(fs('a','c','b','d'),   1),
+                         (fs('a','c','b'),       2),
+                         (fs('a','b','d'),       3),
+                         (fs('a','c','d'),       4),
+                         (fs('c','b','d'),       5),
+                         (fs('a','b'),           6),
+                         (fs('a','c'),           7),
+                         (fs('a','d'),           8),
+                         (fs('b','c'),           9),
+                         (fs('b','d'),          10),
+                         (fs('c','d'),          11),
+                         (fs('a'),              12),
+                         (fs('b'),              13),
+                         (fs('c'),              14),
+                         (fs('d'),              15)])
 
 if __name__ == '__main__':
     unittest.main()
