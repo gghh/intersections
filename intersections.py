@@ -83,18 +83,50 @@ def inclusionexclusion(elem, compl, allInters):
                         subints(elem, compl)))))
     return currentInters - subintValue
 
-def explode(allNames, allInters):
-    out = []
-    for cardinality in allsubsets(allNames):
+def explode(allNames, allInters, threshold=1):
+    explosion = []
+    for level in allsubsets(allNames):
         tmp = []
-        for elem in cardinality:
+        for elem in level:
             tmp.append([frozenset(elem),
                         inclusionexclusion(elem,
                                            complem(allNames, elem),
                                            allInters)])
-        out.append(tmp)
-    out.reverse()
-    return dict(flatten(out))
+        explosion.append(tmp)
+    explosion.reverse()
+    if threshold == 1:
+        return dict(flatten(explosion))
+    elif threshold > 1:
+        fromprevious = []
+        cleanexplosion = []
+        for level in explosion:
+            updatedlevel, fromprevious = clean(level, fromprevious, threshold)
+            cleanexplosion.append(updatedlevel)
+        return dict(flatten(cleanexplosion))
+
+def clean(level, fromprevious, threshold):
+    updatedlevel = []
+    tonext = []
+    tmplevel = dict(level)
+    # first stage: spread fromprevious on current level
+    for elem, size in fromprevious:
+        subsets = [(x, y) for (x, y) in level if x.issubset(elem)]
+        nsubsets = len(subsets)
+        q, r = size / nsubsets, size % nsubsets
+        for cnt, (subelem, subelemsize) in enumerate(subsets):
+            tmplevel[subelem] += q
+            if cnt + 1 <= r:
+                tmplevel[subelem] += 1
+    # second stage: check if tmplevel elements pass threshold
+    # (little trick to have predictable ordering in tmplevel2)
+    tmplevel2 = [(elem, tmplevel[elem])  for (elem, size) in level]
+    for elem, size in tmplevel2:
+        if size < threshold:
+            updatedlevel.append([elem, 0])
+            tonext.append([elem, size])
+        else:
+            updatedlevel.append([elem, size])
+    return updatedlevel, tonext
 
 if __name__ == '__main__':
     sets = {'a': ['apple', 'banana'],

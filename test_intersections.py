@@ -116,19 +116,53 @@ class testInclusionExclusion(unittest.TestCase):
                                            ['b', 'c'],
                                            self.allInters) == 1)
 
-class testExplode(unittest.TestCase):
-    def test_explode_3sets(self):
-        sets = {'a': ['apple', 'banana'],
-                'b': ['orange', 'apple', 'watermelon'],
-                'c': ['peach', 'plum', 'pear', 'apple', 'orange']}
-        
-        allInters = intersLookup(sets)
-        e = explode(sets.keys(), allInters)
-        self.assertTrue(e ==
-                        {fs('a'): 1, fs('a','c','b'): 1, fs('c'): 3, fs('b'): 1,
-                         fs('c','b'): 1, fs('a','b'): 0, fs('a','c'): 0})
+class testClean(unittest.TestCase):
+    def test_clean3(self):
+        level = [[fs('a', 'b'), 42],
+                 [fs('b', 'c'), 42],
+                 [fs('a', 'c'), 42]]
+        fromprevious = [[fs('a', 'b', 'c'), 5]]
+        threshold = 44
+        updatedlevel, tonext = clean(level, fromprevious, threshold)
 
-    def test_explode_4sets(self):
+        # updatedlevel: 5 items from previous level are spread among
+        # elements of current level. Two of them make it to the threshold,
+        # the third one doesn't and it's updated to 0.
+        self.assertTrue(len(updatedlevel) == len(level))
+        self.assertTrue([fs('a', 'b'), 44] in updatedlevel)
+        self.assertTrue([fs('b', 'c'), 44] in updatedlevel)
+        self.assertTrue([fs('a', 'c'), 0] in updatedlevel)
+        
+        self.assertTrue(len(tonext) == 1)
+        self.assertTrue([fs('a', 'c'), 43] in tonext)
+
+    def test_clean4(self):
+        level = [[fs('a', 'b'), 42],
+                 [fs('a', 'c'), 42],
+                 [fs('a', 'd'), 42],
+                 [fs('b', 'c'), 42],
+                 [fs('b', 'd'), 42],
+                 [fs('c', 'd'), 42]]
+        fromprevious = [[fs('a', 'b', 'c'), 5]]
+        threshold = 44
+        updatedlevel, tonext = clean(level, fromprevious, threshold)
+
+        self.assertTrue(len(updatedlevel) == len(level))
+        self.assertTrue([fs('a', 'b'), 44] in updatedlevel)
+        self.assertTrue([fs('a', 'c'), 44] in updatedlevel)
+        self.assertTrue([fs('a', 'd'), 0] in updatedlevel)
+        self.assertTrue([fs('b', 'd'), 0] in updatedlevel)
+        self.assertTrue([fs('c', 'b'), 0] in updatedlevel)
+        self.assertTrue([fs('c', 'd'), 0] in updatedlevel)
+
+        self.assertTrue(len(tonext) == 4)
+        self.assertTrue([fs('a', 'd'), 42] in tonext)
+        self.assertTrue([fs('b', 'd'), 42] in tonext)
+        self.assertTrue([fs('c', 'b'), 43] in tonext)
+        self.assertTrue([fs('c', 'd'), 42] in tonext)
+
+class testExplode(unittest.TestCase):
+    def setUp(self):
         liA = []
         liB = []
         liC = []
@@ -180,9 +214,22 @@ class testExplode(unittest.TestCase):
         liC += range(92, 106)
         
         liD += range(106, 121)
+
+        self.sets = {'a': liA, 'b': liB, 'c': liC, 'd': liD}
+
+    def test_explode_3sets(self):
+        sets = {'a': ['apple', 'banana'],
+                'b': ['orange', 'apple', 'watermelon'],
+                'c': ['peach', 'plum', 'pear', 'apple', 'orange']}
         
-        allInters = intersLookup({'a': liA, 'b': liB,
-                                  'c': liC, 'd': liD})
+        allInters = intersLookup(sets)
+        e = explode(sets.keys(), allInters)
+        self.assertTrue(e ==
+                        {fs('a'): 1, fs('a','c','b'): 1, fs('c'): 3, fs('b'): 1,
+                         fs('c','b'): 1, fs('a','b'): 0, fs('a','c'): 0})
+
+    def test_explode_4sets(self):
+        allInters = intersLookup(self.sets)
         e = explode(['a', 'b', 'c', 'd'], allInters)
         self.assertTrue(sorted(e.iteritems(), key=lambda x: x[1]) ==
                         [(fs('a','c','b','d'),   1),
@@ -200,6 +247,27 @@ class testExplode(unittest.TestCase):
                          (fs('b'),              13),
                          (fs('c'),              14),
                          (fs('d'),              15)])
+
+    def test_explode_4sets_threshold(self):
+        allInters = intersLookup(self.sets)
+        e = explode(['a', 'b', 'c', 'd'], allInters, threshold=10)
+        self.assertTrue(sorted(e.iteritems(),
+                               key = lambda x: ''.join(list(x[0]))) ==
+                        [(fs('a'),                 16),
+                         (fs('a', 'b'),             0),
+                         (fs('a', 'b', 'd'),        0),
+                         (fs('a', 'c'),            10),
+                         (fs('a', 'c', 'b'),        0),
+                         (fs('a', 'c', 'b', 'd'),   0),
+                         (fs('a', 'c', 'd'),        0),
+                         (fs('a', 'd'),            10),
+                         (fs('b'),                 17),
+                         (fs('b', 'd'),            13),
+                         (fs('c'),                 14),
+                         (fs('c', 'b'),            11),
+                         (fs('c', 'b', 'd'),        0),
+                         (fs('c', 'd'),            14),
+                         (fs('d'),                 15)])
 
 if __name__ == '__main__':
     unittest.main()
