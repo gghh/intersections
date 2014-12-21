@@ -84,14 +84,17 @@ def inclusionexclusion(elem, compl, allInters):
     return currentInters - subintValue
 
 def explode(allNames, allInters):
-    out = {}
-    for elem in flatten(allsubsets(allNames)):
-        out[frozenset(elem)] = \
-                    inclusionexclusion(elem,
-                                       complem(allNames, elem),
-                                       allInters)
-    return out
-    
+    out = []
+    for cardinality in allsubsets(allNames):
+        tmp = []
+        for elem in cardinality:
+            tmp.append([frozenset(elem),
+                        inclusionexclusion(elem,
+                                           complem(allNames, elem),
+                                           allInters)])
+        out.append(tmp)
+    out.reverse()
+    return dict(flatten(out))
 
 if __name__ == '__main__':
     sets = {'a': ['apple', 'banana'],
