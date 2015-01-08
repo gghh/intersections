@@ -10,19 +10,6 @@ class testFlatten(unittest.TestCase):
                         ['a', 'b', 'c', 'd', 'e'])
 
 
-class testPerm(unittest.TestCase):
-    def test_perm(self):
-        p = perm(['a', 'b', 'c'])
-        
-        self.assertTrue(len(p) == 6)
-        self.assertTrue(['a', 'b', 'c'] in p)
-        self.assertTrue(['a', 'c', 'b'] in p)
-        self.assertTrue(['b', 'a', 'c'] in p)
-        self.assertTrue(['b', 'c', 'a'] in p)
-        self.assertTrue(['c', 'a', 'b'] in p)
-        self.assertTrue(['c', 'b', 'a'] in p)
-                    
-
 class testChoice(unittest.TestCase):
     def test_choice(self):
         c2 = choose_n(2, ['a', 'b', 'c'])
@@ -58,11 +45,10 @@ class testIntersLookup(unittest.TestCase):
                                'c': ['peach', 'plum', 'pear', 'apple', 'orange']})
         self.assertTrue(lookup == 
                         {fs('a'): 2, fs('c'): 5, fs('b'): 3, 
-                         fs('a','b','c'): 1, fs('b','c','a'): 1, fs('c','b','a'): 1,
-                         fs('a','c','b'): 1, fs('b','a','c'): 1, fs('c','a','b'): 1,
-                         fs('b','a'): 1, fs('a','b'): 1,
-                         fs('b','c'): 2, fs('c','b'): 2,
-                         fs('c','a'): 1, fs('a','c'): 1})
+                         fs('a','b','c'): 1,
+                         fs('a','b'): 1,
+                         fs('b','c'): 2, 
+                         fs('a','c'): 1})
 
 class testSubints(unittest.TestCase):
     def test_subints_1(self):
