@@ -99,9 +99,7 @@ def clean(level, fromprevious, threshold):
             if cnt + 1 <= r:
                 tmplevel[subelem] += 1
     # second stage: check if tmplevel elements pass threshold
-    # (little trick to have predictable ordering in tmplevel2)
-    tmplevel2 = [(elem, tmplevel[elem])  for (elem, size) in level]
-    for elem, size in tmplevel2:
+    for elem, size in tmplevel.iteritems():
         if size < threshold:
             updatedlevel.append([elem, 0])
             tonext.append([elem, size])
