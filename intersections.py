@@ -24,12 +24,12 @@ def allsubsets(srcList):
         else:
             yield choose_n(i, srcList)
 
-def intersLookup(lists):
-    toInters = flatten(allsubsets(lists.keys()))
+def intersLookup(sets):
+    toInters = flatten(allsubsets(sets.keys()))
     def inters_n(names):
-        acc = set(lists[names[0]])
+        acc = sets[names[0]]
         for name in names[1:]:
-            acc = acc.intersection(set(lists[name]))
+            acc = acc.intersection(sets[name])
         return acc
     lookup = {}
     for sequence in toInters:

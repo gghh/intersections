@@ -40,9 +40,9 @@ class testSubsets(unittest.TestCase):
 
 class testIntersLookup(unittest.TestCase):
     def test_intersLookup(self):
-        lookup = intersLookup({'a': ['apple', 'banana'],
-                               'b': ['orange', 'apple', 'watermelon'],
-                               'c': ['peach', 'plum', 'pear', 'apple', 'orange']})
+        lookup = intersLookup({'a': set(['apple', 'banana']),
+                               'b': set(['orange', 'apple', 'watermelon']),
+                               'c': set(['peach', 'plum', 'pear', 'apple', 'orange'])})
         self.assertTrue(lookup == 
                         {fs('a'): 2, fs('c'): 5, fs('b'): 3, 
                          fs('a','b','c'): 1,
@@ -83,9 +83,9 @@ class testSubints(unittest.TestCase):
 
 class testInclusionExclusion(unittest.TestCase):
     def setUp(self):
-        self.allInters = intersLookup({'a': ['apple', 'banana'],
-                                       'b': ['orange', 'apple', 'watermelon'],
-                                       'c': ['peach', 'plum', 'pear', 'apple', 'orange']})
+        self.allInters = intersLookup({'a': set(['apple', 'banana']),
+                                       'b': set(['orange', 'apple', 'watermelon']),
+                                       'c': set(['peach', 'plum', 'pear', 'apple', 'orange'])})
 
     def test_inclusionexclusion_1(self):
         self.assertTrue(inclusionexclusion(['a', 'b'],
@@ -201,12 +201,12 @@ class testExplode(unittest.TestCase):
         
         liD += range(106, 121)
 
-        self.sets = {'a': liA, 'b': liB, 'c': liC, 'd': liD}
+        self.sets = {'a': set(liA), 'b': set(liB), 'c': set(liC), 'd': set(liD)}
 
     def test_explode_3sets(self):
-        sets = {'a': ['apple', 'banana'],
-                'b': ['orange', 'apple', 'watermelon'],
-                'c': ['peach', 'plum', 'pear', 'apple', 'orange']}
+        sets = {'a': set(['apple', 'banana']),
+                'b': set(['orange', 'apple', 'watermelon']),
+                'c': set(['peach', 'plum', 'pear', 'apple', 'orange'])}
         
         allInters = intersLookup(sets)
         e = explode(sets.keys(), allInters)
