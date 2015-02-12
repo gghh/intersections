@@ -27,9 +27,10 @@ def allsubsets(srcList):
 def intersLookup(lists):
     toInters = flatten(allsubsets(lists.keys()))
     def inters_n(names):
-        return reduce(lambda s, t: set(s).intersection(set(t)),
-                      [lists[name] for name in names[1:]],
-                      lists[names[0]])
+        acc = set(lists[names[0]])
+        for name in names[1:]:
+            acc = acc.intersection(set(lists[name]))
+        return acc
     lookup = {}
     for sequence in toInters:
         cardinality = len(inters_n(sequence))
