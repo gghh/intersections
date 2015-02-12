@@ -8,9 +8,9 @@ Computes intersection explosions.
 ```
 import intersections
 
-sets = {'a': ['apple', 'banana'],
-        'b': ['orange', 'apple', 'watermelon'],
-        'c': ['peach', 'plum', 'pear', 'apple', 'orange']}
+sets = {'a': set(['apple', 'banana']),
+        'b': set(['orange', 'apple', 'watermelon']),
+        'c': set(['peach', 'plum', 'pear', 'apple', 'orange'])}
 allInters = intersections.intersLookup(sets)
 print intersections.explode(sets.keys(), allInters)
 ```
