@@ -1,3 +1,5 @@
+from collections import Counter
+
 def flatten(listlist):
     return [elem for list_ in listlist for elem in list_]
 
@@ -84,6 +86,10 @@ def explode(allNames, allInters, threshold=1):
         for level in explosion:
             updatedlevel, fromprevious = clean(level, fromprevious, threshold)
             cleanexplosion.append(updatedlevel)
+        # last level needs a merge
+        cleanexplosion.pop()
+        lastlevel = Counter(dict(updatedlevel)) + Counter(dict(fromprevious))
+        cleanexplosion.append(list(lastlevel.iteritems()))
         return dict(flatten(cleanexplosion))
 
 def clean(level, fromprevious, threshold):
